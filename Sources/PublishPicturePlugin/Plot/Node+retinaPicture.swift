@@ -35,6 +35,22 @@ public extension Node where Context: HTML.BodyContext {
             .group(nodes)
         ])
     }
+
+    static func retinaPicture(markdown: Substring, _ nodes: Node<HTML.BodyContext>...) -> Node {
+        retinaPicture(markdown: String(markdown), .group(nodes))
+    }
+    
+    static func retinaPicture(markdown: String, _ nodes: Node<HTML.BodyContext>...) -> Node {
+        guard let imageMeta = MarkdownImageMeta(markdown: markdown) else {
+            return .empty
+        }
+
+        return .retinaPicture(
+            path: imageMeta.url.path,
+            includeDark: imageMeta.queryKeyExists("dark"),
+            .group(nodes)
+        )
+    }
 }
 
 extension RetinaImagePath {

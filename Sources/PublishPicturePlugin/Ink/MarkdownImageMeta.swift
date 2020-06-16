@@ -12,7 +12,7 @@ struct MarkdownImageMeta {
     let url: URL
     let alt: String?
     
-    init?(markdown: Substring) {
+    init?(markdown: String) {
         guard
             markdown.first == "!",
             let path = markdown.firstSubstring(between: "(", and: ")"),
@@ -23,6 +23,11 @@ struct MarkdownImageMeta {
         
         self.url = url
         self.alt = markdown.firstSubstring(between: "[", and: "]").map { String($0) }
+    }
+    
+
+    init?(markdown: Substring) {
+        self.init(markdown: String(markdown))
     }
     
     func queryValue(for key: String) -> String? {
