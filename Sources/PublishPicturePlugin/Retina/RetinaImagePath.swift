@@ -34,10 +34,13 @@ public struct RetinaImagePath: ExpressibleByStringLiteral {
         }
     }
     
-    func retinaURL(scale: Int = 1) -> URL {
-        var basePath = self.basePath
+    func retinaURL(scale: Int = 1, postfix: String = "") -> URL {
+        let basePath: String
         if scale > 1 {
-            basePath = "\(basePath)@\(scale)x"
+            basePath = "\(self.basePath)\(postfix)@\(scale)x"
+        }
+        else {
+            basePath = "\(self.basePath)\(postfix)"
         }
 
         var url = URL(fileURLWithPath: basePath)

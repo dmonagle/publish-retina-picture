@@ -20,12 +20,15 @@ public extension Plugin {
 extension Modifier {
     static var pictureImageModifier: Self {
         Modifier(target: .images) { html, markdown in
-            guard
-                let imageMeta = MarkdownImageMeta(markdown: markdown),
-                let node = try? Node.retinaPicture(path: imageMeta.url.path, includeDark: imageMeta.queryKeyExists("dark"))
-            else {
+            guard let imageMeta = MarkdownImageMeta(markdown: markdown) else {
                 return html
             }
+            
+            let node = Node.retinaPicture(
+                path: imageMeta.url.path,
+                includeDark: imageMeta.queryKeyExists("dark"),
+                alt: imageMeta.alt
+            )
             
             return node.render()
         }
