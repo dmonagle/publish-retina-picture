@@ -10,7 +10,7 @@ import Plot
 import Foundation
 
 public extension Node where Context: HTML.BodyContext {
-    static func retinaPicture(path: String, includeDark: Bool, alt: String? = nil, _ nodes: Node<HTML.BodyContext>...) -> Node {
+    static func retinaPicture(path: String, includeDark: Bool = false, alt: String? = nil, _ nodes: Node<HTML.BodyContext>...) -> Node {
         let retinaImage = RetinaImagePath(stringLiteral: path)
         
         var sourceNodes: [Node<HTML.BodyContext>] = [
