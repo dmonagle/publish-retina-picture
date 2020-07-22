@@ -16,7 +16,7 @@ public extension Node where Context: HTML.BodyContext {
         var sourceNodes: [Node<HTML.BodyContext>] = [
             .element(named: "source", nodes: [
                 .attribute(named: "srcset", value: retinaImage.srcset()),
-                .attribute(named: "media", value: "(prefers-color-scheme: light)")
+                .if(includeDark, .attribute(named: "media", value: "(prefers-color-scheme: light)"))
             ])
         ]
         
