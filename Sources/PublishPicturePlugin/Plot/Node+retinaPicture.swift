@@ -9,8 +9,8 @@ import Publish
 import Plot
 import Foundation
 
-public extension Node where Context: HTML.BodyContext {
-    static func retinaPicture(path: String, includeDark: Bool = false, alt: String? = nil, _ nodes: Node<HTML.BodyContext>...) -> Node {
+extension Node where Context: HTML.BodyContext {
+    static func retinaPicture(path: String, includeDark: Bool = false, alt: String? = nil, imgAttributes: [Attribute<HTML.ImageContext>]) -> Node {
         let retinaImage = RetinaImagePath(stringLiteral: path)
         
         var sourceNodes: [Node<HTML.BodyContext>] = [
@@ -29,18 +29,19 @@ public extension Node where Context: HTML.BodyContext {
             )
         }
         
+        var imgAttributes = imgAttributes
+        imgAttributes.append(.src(retinaImage.retinaURL(scale: 1).path))
+        if let alt = alt {
+            imgAttributes.append(.alt(alt))
+        }
+        
         return .element(named: "picture", nodes: [
             .group(sourceNodes),
-            .img(src: retinaImage.retinaURL(scale: 1).path, alt: alt),
-            .group(nodes)
+            .selfClosedElement(named: "img", attributes: imgAttributes)
         ])
     }
-
-    static func retinaPicture(markdown: Substring, _ nodes: Node<HTML.BodyContext>...) -> Node {
-        retinaPicture(markdown: String(markdown), .group(nodes))
-    }
     
-    static func retinaPicture(markdown: String, _ nodes: Node<HTML.BodyContext>...) -> Node {
+    static func retinaPicture(markdown: String, imgAttributes: [Attribute<HTML.ImageContext>]) -> Node {
         guard let imageMeta = MarkdownImageMeta(markdown: markdown) else {
             return .empty
         }
@@ -48,8 +49,24 @@ public extension Node where Context: HTML.BodyContext {
         return .retinaPicture(
             path: imageMeta.url.path,
             includeDark: imageMeta.queryKeyExists("dark"),
-            .group(nodes)
+            imgAttributes: imgAttributes
         )
+    }
+
+}
+
+public extension Node where Context: HTML.BodyContext {
+    static func retinaPicture(path: String, includeDark: Bool = false, alt: String? = nil, _ imgAttributes: Attribute<HTML.ImageContext>...) -> Node {
+        .retinaPicture(
+            path: path,
+            includeDark: includeDark,
+            alt: alt,
+            imgAttributes: imgAttributes
+        )
+    }
+    
+    static func retinaPicture(markdown: Substring, _ imgAttributes: Attribute<HTML.ImageContext>...) -> Node {
+        retinaPicture(markdown: String(markdown), imgAttributes: imgAttributes)
     }
 }
 
@@ -67,7 +84,7 @@ extension RetinaImagePath {
 }
 
 extension Node where Context == HTML.BodyContext {
-    static func img(src: String, alt: String? = nil, _ attributes: Attribute<HTML.ImageContext>...) -> Node {
+    static func img(src: String, alt: String? = nil, _ attributes: [Attribute<HTML.ImageContext>] = []) -> Node {
         var attributes = attributes
         attributes.append(.src(src))
         if let alt = alt {
