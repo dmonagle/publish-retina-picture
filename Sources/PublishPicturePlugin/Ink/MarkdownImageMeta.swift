@@ -47,7 +47,7 @@ struct MarkdownImageMeta {
             return [:]
         }
 
-        return queryItems.reduce(into: [String: String]()) { (result, item) in
+        return queryItems.reduce(into: [String: String?]()) { (result, item) in
             result[item.name] = item.value
         }
     }
