@@ -5,6 +5,7 @@
 //  Created by David Monagle on 16/6/20.
 //
 
+import RetinaPicture
 import Publish
 import Files
 import Foundation

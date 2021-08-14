@@ -5,8 +5,8 @@
 //  Copyright © 2020 David Monagle. All rights reserved.
 //
 
+import RetinaPicture
 import Publish
-import Files
 import Foundation
 import ShellOut
 
