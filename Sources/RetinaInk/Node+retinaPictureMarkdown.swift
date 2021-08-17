@@ -10,7 +10,7 @@ import RetinaPicture
 
 
 public extension Node where Context: HTML.BodyContext {
-    static func retinaPicture(markdown: String, _ imgAttributes: Attribute<HTML.ImageContext>...) -> Node {
+    static func retinaPicture(markdown: String, imgAttributes: [Attribute<HTML.ImageContext>]) -> Node {
         guard let imageMeta = MarkdownImageMeta(markdown: markdown) else {
             return .empty
         }
@@ -21,9 +21,13 @@ public extension Node where Context: HTML.BodyContext {
             imgAttributes: imgAttributes
         )
     }
-    
+
+    static func retinaPicture(markdown: String, _ imgAttributes: Attribute<HTML.ImageContext>...) -> Node {
+        retinaPicture(markdown: markdown, imgAttributes: imgAttributes)
+    }
+
     static func retinaPicture(markdown: Substring, _ imgAttributes: Attribute<HTML.ImageContext>...) -> Node {
-        retinaPicture(markdown: String(markdown))
+        retinaPicture(markdown: String(markdown), imgAttributes: imgAttributes)
     }
 }
 
