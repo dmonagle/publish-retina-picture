@@ -8,11 +8,11 @@
 import Foundation
 
 /// Destructs a markdown image
-struct MarkdownImageMeta {
-    let url: URL
-    let alt: String?
+public struct MarkdownImageMeta {
+    public let url: URL
+    public let alt: String?
     
-    init?(markdown: String) {
+    public init?(markdown: String) {
         guard
             markdown.first == "!",
             let path = markdown.firstSubstring(between: "(", and: ")"),
@@ -26,20 +26,20 @@ struct MarkdownImageMeta {
     }
     
 
-    init?(markdown: Substring) {
+    public init?(markdown: Substring) {
         self.init(markdown: String(markdown))
     }
     
-    func queryValue(for key: String) -> String? {
+    public func queryValue(for key: String) -> String? {
         guard let value = self.queryParameters[key] else { return nil }
         return value
     }
 
-    func queryKeyExists(_ key: String) -> Bool {
+    public func queryKeyExists(_ key: String) -> Bool {
         self.queryParameters.keys.contains(key)
     }
 
-    var queryParameters: [String: String?] {
+    public var queryParameters: [String: String?] {
         guard
             let components = URLComponents(url: self.url, resolvingAgainstBaseURL: true),
             let queryItems = components.queryItems
